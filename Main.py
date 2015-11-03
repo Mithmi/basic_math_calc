@@ -84,10 +84,15 @@ def Lagrange(func, equation):
     results = result[0].subs({x:x1, y:y1})
     LH = LH.subs({h1:results})
     print(LH)
-    Result = LH.subs({h2:0})
-    print(Result >= 0)
+    Result = LH.subs({h2:1})
     print(results)
-    return L
+    if Result > 0:
+        print('local minimum')
+    elif Result < 0:
+        print('local maximum')
+    else:
+        print('not extremum')
+    return Result
 
 x, y, z = symbols('x y z')
 j0, j1, h1, h2 = var('j0 j1 h1 h2')
