@@ -59,8 +59,42 @@ def OptimizationDeter(func):
             m += 1
     return m
 
+def Lagrange(func, equation):
+    j0 = 1
+    L = j0*(func) + j1*(equation)
+    Lx = diff(L, x)
+    Ly = diff(L, y)
+    print(Lx, '\n', Ly, '\n', equation)
+    calc = solve([Lx, Ly, equation])
+    print(calc)
+    j = calc[0][j1]
+    LM = Matrix(((diff(Lx, x), diff(Lx, y)), (diff(Ly, x), diff(Ly, y))))
+    print(LM)
+    minor1 = LM[0, 0].evalf(subs={j1:j})
+    minor2 = LM.det().evalf(subs={j1:j})
+    print(minor1, minor2, j)
+    H = h1 * diff(equation, x) + h2 * diff(equation, y)
+    print(H)
+    y1 = calc[-1][y]
+    x1 = calc[-1][x]
+    print(y1, x1, x1/y1)
+    result = solve(H, h1)
+    print(result)
+    LH = h1**2 + 2*h1*h2 + h2**2
+    results = result[0].subs({x:x1, y:y1})
+    LH = LH.subs({h1:results})
+    print(LH)
+    Result = LH.subs({h2:0})
+    print(Result >= 0)
+    print(results)
+    return L
+
 x, y, z = symbols('x y z')
-func = x ** 3 + y ** 2 + z ** 2 + y * z - 3 * x + 6 * y + 2
+j0, j1, h1, h2 = var('j0 j1 h1 h2')
+func = x**3 + y**2 + z**2 + y * z - 3 * x + 6 * y + 2
 Silv = Silvester(func)
-func = sin(x) * (-x) ** 5
+func = sin(x) * (-x)**5
 Opti = OptimizationDeter(func)
+func = 5 * x**2 + y**2 + 2 * x * y
+equation = x * y - 10
+Lag = Lagrange(func, equation)
