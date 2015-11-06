@@ -1,5 +1,5 @@
 from sympy import *
-
+from sympy.parsing.sympy_parser import parse_expr
 
 def Silvester(func):
     dx = diff(func, x)
@@ -96,10 +96,25 @@ def Lagrange(func, equation):
 
 x, y, z = symbols('x y z')
 j0, j1, h1, h2 = var('j0 j1 h1 h2')
-func = x**3 + y**2 + z**2 + y * z - 3 * x + 6 * y + 2
-Silv = Silvester(func)
-func = sin(x) * (-x)**5
-Opti = OptimizationDeter(func)
-func = 5 * x**2 + y**2 + 2 * x * y
-equation = x * y - 10
-Lag = Lagrange(func, equation)
+task = input('Silv, Opti or Lag?')
+if task == 'Silv':
+    try:
+        func = parse_expr(input('Give me function'))
+    except IOError:
+        func = x**3 + y**2 + z**2 + y * z - 3 * x + 6 * y + 2
+    Silv = Silvester(func)
+elif task == 'Opti':
+    try:
+        func = parse_expr(input('Give me function'))
+        print(func)
+    except IOError:
+        func = sin(x) * (-x)**5
+    Opti = OptimizationDeter(func)
+elif task == 'Lag':
+    try:
+        func = parse_expr(input('Give me function'))
+        equation = parse_expr(input('Give me Equation'))
+    except IOError:
+        func = 5 * x**2 + y**2 + 2 * x * y
+        equation = x * y - 10
+    Lag = Lagrange(func, equation)
