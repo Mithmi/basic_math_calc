@@ -67,12 +67,12 @@ def change(inStr):
     return outStr
 
 
-func = "5 * x**2 + y**2 + 2 * x * y"
+func = 5 * x**2 + y**2 + 2 * x * y
 func1 = "5*x**2+y**2+2*x*y!!"
-"""
+
 
 equation = x * y - 10
-#Lag = Lagrange(func, equation)
+Lag = Lagrange(func, equation)
 
 m = diff(-2*x/a**2, x)
 print(m)
@@ -80,7 +80,7 @@ f = (x - a/3)**2 * 2/a**2 * (a - x) * x
 res = integrate(f, (x, 0, a))
 print(res)
 
-"""
+
 
 
 
