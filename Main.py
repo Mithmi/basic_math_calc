@@ -29,6 +29,8 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
         value = self.lineEdit_2.text()
         reforged = filter(value, self.allowed)
         self.label_3.setText(reforged)
+        Opti = OptimizationDeter(reforged)
+        self.label_4.setText(Opti)
 
     def Lag_button_clicked(self):
         value = self.lineEdit_3.text()
@@ -37,7 +39,8 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
         reforged1 = filter(value1, self.allowed)
         self.label_5.setText(reforged)
         self.label_7.setText(reforged1)
-
+        Lag = Lagrange(reforged, reforged1)
+        self.label_6.setText(Lag)
 
 
 def fmtstr(fmt, str):
@@ -67,7 +70,6 @@ def Silvester(func):
     que = [x, y, z]
     dque = [dx, dy, dz]
     res = []
-    print(result)
     for i in range(len(que)):
         for j in range(len(que)):
             d = diff(dque[i], que[j])
@@ -78,15 +80,14 @@ def Silvester(func):
     minor2 = N.det()
     minor3 = M.det()
     N = Matrix([res[4:6], res[7:9]])
-    print(N)
     minor4 = N.det()
-    print(res[0], res[2], res[7], res[8])
     N = Matrix([[res[0], res[2]], [res[7], res[8]]])
-    print(N)
     minor5 = N.det()
     minor6 = res[8]
     minor7 = res[4]
     minor8 = res[0]
+    print(M)
+    print(N)
     hart = ""
     for k in range(len(result)):
         try:
@@ -124,27 +125,23 @@ def Silvester(func):
                 m7 = minor3.evalf(subs={x: result[k][x]})
                 m8 = minor3.evalf(subs={x: result[k][x]})
                 hart += "x = " + str(result[k][x]) + "\n" \
-                    + "y = " + "0" + "\n" \
-                    + "z = " + "0" + "\n\n"
+                + "y = " + "0" + "\n" \
+                + "z = " + "0" + "\n\n"
+
         if m1 >= 0 and m2 >= 0 and m3 >= 0:
             matrix_status = "Так как все миноры >= 0, следовательно матрица >= 0"
-            print(matrix_status)
             end = "А значит X точка - locmin, так как матрица - неотрицательно определена"
         elif m1 <= 0 and m2 >= 0 and m3 <= 0:
             matrix_status = "Так как некоторые из миноров >= 0, следовательно матрица =< 0"
-            print(matrix_status)
             end = "А значит точка X - locmax, так как матрица - неположительно определена"
         elif m1 > 0 and m2 > 0 and m3 > 0:
             matrix_status = "Так как все миноры > 0, следовательно матрица > 0"
-            print(matrix_status)
             end = "А значит точка X - locmin, так как матрица - положительно определена"
         elif m1 < 0 and m2 < 0 and m3 < 0:
             matrix_status = "Так как М1 все миноры < 0, следовательно матрица < 0"
-            print(matrix_status)
             end = "А значит точка X - locmax, так как матрица - отрицательно определена"
         else:
             matrix_status = "Так как присутствуют Миноры > и < 0, то матрица является знакопеременной"
-            print(matrix_status)
             end = "А значит точка X - не является locextrm"
     result = "Возьмём производную первого порядка по всем переменным:\n\n" \
     + "df/dx = " + str(dx) + "\n" \
@@ -170,56 +167,61 @@ def Silvester(func):
     + "M7 = " + str(minor7) + " = " + str(m7) + "\n" \
     + "M8 = " + str(minor8) + " = " + str(m8) + "\n\n" \
     + matrix_status + "\n" + end + "\n"
-    print(result)
     return result
 
 
 def OptimizationDeter(func):
     m = 0
+    result = "Для решения данной задачи оптимизации необходимо брать" \
+             " производные от функции до тех пор пока f`(x) =/= 0. \n\n"
     done = False
     while not done:
         dx = diff(func, x, m)
-        print(dx)
         check = dx.evalf(subs={x:0})
-        print(check)
-        print(m)
+        result += "dx" + str(m) + " = " + str(dx) + " = " + str(check) + "\n"
         if check != 0:
-            return m
+            if m % 2 == 0:
+                if check > 0:
+                    result += "m = " + str(m) + " - четное следовательно точка Х " \
+                                                "- locextrm, т.к. f`(X) > 0, то Х - locmin"
+                else:
+                    result += "m = " + str(m) + " - четное следовательно точка Х " \
+                                                "- locextrm, т.к. f`(X) < 0, то Х - locmax"
+            else:
+                result += "m = " + str(m) + " - нечетное, нет экстремумов."
+            return result
         else:
             m += 1
-    return m
+    return result
 
 def Lagrange(func, equation):
+    answer = ""
     j0 = 1
-    L = j0*(func) + j1*(equation)
+    print(j1, j0)
+    print(equation)
+    print(type(equation))
+    g = "x"*j1
+    print(g)
+    L = j0*func + j1*equation
+    print(L)
     Lx = diff(L, x)
     Ly = diff(L, y)
-    print(Lx, '\n', Ly, '\n', equation)
     calc = solve([Lx, Ly, equation])
-    print(calc)
     LM = Matrix(((diff(Lx, x), diff(Lx, y)), (diff(Ly, x), diff(Ly, y))))
-    print(LM)
     H = h1 * diff(equation, x) + h2 * diff(equation, y)
-    print(H)
     result = solve(H, h1)
-    print(result)
     LH = h1**2 + 2*h1*h2 + h2**2
+    answer = "L(x,y,j0,j1) = " + str(L) + "\n" + "Lx = " + str(Lx) + "\n" + "Ly = " + str(Ly) + "\n"
     for i in range(len(calc)):
         j = calc[i][j1]
         minor1 = LM[0, 0].evalf(subs={j1:j})
         minor2 = LM.det().evalf(subs={j1:j})
-        print(minor1, minor2, j)
         y1 = calc[i][y]
         x1 = calc[i][x]
-        print(y1, x1, x1/y1)
         for k in range(len(result)):
-            print('x ==', x1, 'y ==', y1)
             results = result[k].subs({x:x1, y:y1})
-            print(results)
             LH = LH.subs({h1:results})
-            print(LH)
             Result = LH.subs({h2:1})
-            print(Result)
             if Result > 0:
                 print('local minimum')
             elif Result < 0:
@@ -231,10 +233,9 @@ def Lagrange(func, equation):
 
 def main():
     #func = "x**3 + y**2 + 0 * z**2 + y * z * 0 - 3 * x + 6 * y + 2"
-    #OptiFunc = filter(func, allowed)
+
     #func = "sin(x) * (-x)**5"
-    #LagFunc = filter(func, allowed)
-    #LagEqua = filter(equation, allowed)
+
     #func = "5 * x**2 + y**2 + 2 * x * y"
     #equation = "x * y - 10"
     app = QtGui.QApplication(sys.argv)

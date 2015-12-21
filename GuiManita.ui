@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>867</width>
-    <height>632</height>
+    <width>931</width>
+    <height>821</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,14 +17,14 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>0</y>
-      <width>861</width>
-      <height>591</height>
+      <width>931</width>
+      <height>791</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -59,7 +59,7 @@
         <x>20</x>
         <y>60</y>
         <width>801</width>
-        <height>481</height>
+        <height>691</height>
        </rect>
       </property>
       <property name="text">
@@ -69,27 +69,14 @@
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>10</y>
+        <x>10</x>
+        <y>30</y>
         <width>75</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
        <string>Рассчитать</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>151</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Рассчитывать все миноры</string>
       </property>
      </widget>
     </widget>
@@ -126,7 +113,7 @@
         <x>20</x>
         <y>60</y>
         <width>801</width>
-        <height>481</height>
+        <height>691</height>
        </rect>
       </property>
       <property name="text">
@@ -136,8 +123,8 @@
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>10</y>
+        <x>10</x>
+        <y>30</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -180,7 +167,7 @@
         <x>20</x>
         <y>90</y>
         <width>801</width>
-        <height>451</height>
+        <height>651</height>
        </rect>
       </property>
       <property name="text">
@@ -213,8 +200,8 @@
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>10</y>
+        <x>10</x>
+        <y>60</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -231,7 +218,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>867</width>
+     <width>931</width>
      <height>21</height>
     </rect>
    </property>
