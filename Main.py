@@ -2,7 +2,7 @@
 import string
 import sys
 from sympy import *
-from sympy.parsing.sympy_parser import parse_expr, stringify_expr
+from sympy.parsing.sympy_parser import parse_expr
 from PyQt4 import QtCore, QtGui, uic
 form_class = uic.loadUiType("GuiManita.ui")[0]
 x, y, z = symbols('x y z')
@@ -86,6 +86,8 @@ def Silvester(func):
     minor6 = res[8]
     minor7 = res[4]
     minor8 = res[0]
+    print(M)
+    print(N)
     hart = ""
     for k in range(len(result)):
         try:
@@ -193,10 +195,15 @@ def OptimizationDeter(func):
     return result
 
 def Lagrange(func, equation):
-    answer = "Составим функцию Лагранжа:\n\n"
+    answer = ""
     j0 = 1
-    L = j0*parse_expr(func) + j1*parse_expr(equation)
-    answer += "L(x,y,j0,j1) = " + str(L) + "\n\n" + "Возьмем производные первого порядка по всем переменным\n\n"
+    print(j1, j0)
+    print(equation)
+    print(type(equation))
+    g = "x"*j1
+    print(g)
+    L = j0*func + j1*equation
+    print(L)
     Lx = diff(L, x)
     Ly = diff(L, y)
     calc = solve([Lx, Ly, equation])
@@ -204,51 +211,31 @@ def Lagrange(func, equation):
     H = h1 * diff(equation, x) + h2 * diff(equation, y)
     result = solve(H, h1)
     LH = h1**2 + 2*h1*h2 + h2**2
-    answer += "Lx = " + str(Lx) + "\n" + \
-              "Ly = " + str(Ly) + "\n\n" + "Получаем систему уравнений:\n\n" \
-              + str(Lx) + " = 0" + '\n' + str(Ly) + " = 0" + '\n' + str(equation) + " = 0" + '\n\n'
-    answer += "Получаем следующие корни:\n"
+    answer = "L(x,y,j0,j1) = " + str(L) + "\n" + "Lx = " + str(Lx) + "\n" + "Ly = " + str(Ly) + "\n"
     for i in range(len(calc)):
         j = calc[i][j1]
         minor1 = LM[0, 0].evalf(subs={j1:j})
         minor2 = LM.det().evalf(subs={j1:j})
         y1 = calc[i][y]
         x1 = calc[i][x]
-        answer += "j = " + str(j) + "\n" + "y = " + str(y1) + "\n" + "x = " + str(x1) + "\n\n"
-        if minor1 >= 0 and minor2 >= 0:
-            matrix_status = "Так как все миноры >= 0, следовательно матрица >= 0"
-            end = "А значит X точка - locmin, так как матрица - неотрицательно определена"
-        elif minor1 <= 0 and minor2 >= 0:
-            matrix_status = "Так как некоторые из миноров >= 0, следовательно матрица =< 0"
-            end = "А значит точка X - locmax, так как матрица - неположительно определена"
-        elif minor1 > 0 and minor2 > 0:
-            matrix_status = "Так как все миноры > 0, следовательно матрица > 0"
-            end = "А значит точка X - locmin, так как матрица - положительно определена"
-        elif minor1 < 0 and minor2 < 0:
-            matrix_status = "Так как М1 все миноры < 0, следовательно матрица < 0"
-            end = "А значит точка X - locmax, так как матрица - отрицательно определена"
-        else:
-            matrix_status = "Так как присутствуют Миноры > и < 0, то матрица является знакопеременной"
-            end = "А значит точка X - не является locextrm"
-        answer += "Составим матрицу производных второго порядка:\n\n" + str(LM[0:2])\
-              + "\n" + str(LM[2:4]) + "\n\n" + "m1 = " + str(minor1) + "\n" + "m2 = " + str(minor2)\
-              + "\n\n" + str(matrix_status) + "\n" + str(end) + "\n\n" + "Составим LH:\n\n" + "LH = "\
-              + str(H) + " = " + str(LH) + " = "
         for k in range(len(result)):
             results = result[k].subs({x:x1, y:y1})
             LH = LH.subs({h1:results})
             Result = LH.subs({h2:1})
             if Result > 0:
-                answer += str(Result) + '\nТак как LH > 0 - local minimum\n\n'
+                print('local minimum')
             elif Result < 0:
-                answer += str(Result) + '\nТак как LH < 0 - local maximum\n\n'
+                print('local maximum')
             else:
-                answer += "\nНе является экстремумом\n\n"
+                print('not extremum')
+    answer = str(Lx) + '\n' + str(Ly) + '\n' +  str(equation) +  '\n' +  '-'*10 +  '\n' + str(calc) + '\n' + '-'*10 + '\n' + str(latex(LM)) + '\n' + str(minor1) + '\n' + str(minor2) + '\n' + str(j) + '\n' + str(H)
     return answer
 
 def main():
     #func = "x**3 + y**2 + 0 * z**2 + y * z * 0 - 3 * x + 6 * y + 2"
+
     #func = "sin(x) * (-x)**5"
+
     #func = "5 * x**2 + y**2 + 2 * x * y"
     #equation = "x * y - 10"
     app = QtGui.QApplication(sys.argv)
