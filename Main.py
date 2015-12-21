@@ -16,6 +16,7 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
         self.pushButton.clicked.connect(self.Silv_button_clicked)
         self.pushButton_2.clicked.connect(self.Opti_button_clicked)
         self.pushButton_3.clicked.connect(self.Lag_button_clicked)
+        self.scrollArea_3.setWidget(self.label_6)
 
 
     def Silv_button_clicked(self):
@@ -193,10 +194,10 @@ def OptimizationDeter(func):
     return result
 
 def Lagrange(func, equation):
-    answer = "Составим функцию Лагранжа:\n\n"
+    answer = "Составим функцию Лагранжа:\n"
     j0 = 1
     L = j0*parse_expr(func) + j1*parse_expr(equation)
-    answer += "L(x,y,j0,j1) = " + str(L) + "\n\n" + "Возьмем производные первого порядка по всем переменным\n\n"
+    answer += "L(x,y,j0,j1) = " + str(L) + "\n\n" + "Возьмем производные первого порядка по всем переменным\n"
     Lx = diff(L, x)
     Ly = diff(L, y)
     calc = solve([Lx, Ly, equation])
@@ -205,7 +206,7 @@ def Lagrange(func, equation):
     result = solve(H, h1)
     LH = h1**2 + 2*h1*h2 + h2**2
     answer += "Lx = " + str(Lx) + "\n" + \
-              "Ly = " + str(Ly) + "\n\n" + "Получаем систему уравнений:\n\n" \
+              "Ly = " + str(Ly) + "\n\n" + "Получаем систему уравнений:\n" \
               + str(Lx) + " = 0" + '\n' + str(Ly) + " = 0" + '\n' + str(equation) + " = 0" + '\n\n'
     answer += "Получаем следующие корни:\n"
     for i in range(len(calc)):
@@ -230,9 +231,9 @@ def Lagrange(func, equation):
         else:
             matrix_status = "Так как присутствуют Миноры > и < 0, то матрица является знакопеременной"
             end = "А значит точка X - не является locextrm"
-        answer += "Составим матрицу производных второго порядка:\n\n" + str(LM[0:2])\
+        answer += "Составим матрицу производных второго порядка:\n" + str(LM[0:2])\
               + "\n" + str(LM[2:4]) + "\n\n" + "m1 = " + str(minor1) + "\n" + "m2 = " + str(minor2)\
-              + "\n\n" + str(matrix_status) + "\n" + str(end) + "\n\n" + "Составим LH:\n\n" + "LH = "\
+              + "\n\n" + str(matrix_status) + "\n" + str(end) + "\n\n" + "Составим LH:\n" + "LH = "\
               + str(H) + " = " + str(LH) + " = "
         for k in range(len(result)):
             results = result[k].subs({x:x1, y:y1})
